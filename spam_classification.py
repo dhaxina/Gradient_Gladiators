@@ -7,7 +7,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import mlflow
 import mlflow.sklearn
-
 import pickle
 
 # Load dataset
@@ -29,11 +28,11 @@ models = {
     },
     "svm": {
         "model": LinearSVC(),
-        "params": {"C": [0.1, 1, 10],"max_iter": [1000, 2000]}
+        "params": {"C": [0.1, 1, 10], "max_iter": [1000, 2000]}
     },
     "DecisionTree": {
         "model": DecisionTreeClassifier(),
-        "params": {"max_depth": [None, 10, 20],"min_samples_split": [2, 5, 10]}
+        "params": {"max_depth": [None, 10, 20], "min_samples_split": [2, 5, 10]}
     }
 }
 
@@ -51,9 +50,9 @@ for model_name, model_info in models.items():
         # Evaluate model
         y_pred = clf.predict(X_test_vec)
         accuracy = accuracy_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred)
-        recall = recall_score(y_test, y_pred)
-        f1 = f1_score(y_test, y_pred)
+        precision = precision_score(y_test, y_pred, pos_label="spam")  # Specify pos_label for binary classification
+        recall = recall_score(y_test, y_pred, pos_label="spam")       # Specify pos_label for binary classification
+        f1 = f1_score(y_test, y_pred, pos_label="spam")               # Specify pos_label for binary classification
 
         # Log metrics
         mlflow.log_params(clf.best_params_)
